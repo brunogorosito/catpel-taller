@@ -1,0 +1,76 @@
+image: node:lts-alpine3.14
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+stages:
+  - build_dev
+  - deploy_dev
+  - build_prod
+  - deploy_prod
+
+build_dev:
+  stage: build_dev
+  script:
+    - node -v
+    - npm -v
+    - npm install --force
+    - npm run build
+  only:
+    refs:
+      - develop
+  artifacts:
+    paths:
+    - dist/
+
+deploy_dev:
+  stage: deploy_dev
+  image: ubuntu:20.04
+  environment:
+    name: testing
+    url: https://tienda-webhost-dev.obs-website.sa-argentina-1.myhuaweicloud.com
+  script:
+    - apt-get update -qq && apt-get install -y -qq zip wget
+    - wget https://obs-community-intl.obs.ap-southeast-1.myhuaweicloud.com/obsutil/current/obsutil_linux_amd64.tar.gz
+    - tar -xzvf obsutil_linux_amd64.tar.gz
+    - chmod -R 755 obsutil_linux_amd64_5.3.4/
+    - cd obsutil_linux_amd64_5.3.4
+    - ./obsutil config -e ${HC_ENDPOINT} -i ${HC_KEY} -k ${HC_SECRET}
+    - ./obsutil sync ../dist/tienda-virtual/ ${HC_BUCKET_WEB_HOST_TESTING}
+  only:
+    refs:
+      - develop
+
+build_prod:
+  stage: build_prod
+  script:
+    - node -v
+    - npm -v
+    - npm install --force
+    - npm run build
+  only:
+    refs:
+      - main
+  artifacts:
+    paths:
+    - dist/
+
+deploy_prod:
+  stage: deploy_prod
+  image: ubuntu:20.04
+  environment:
+    name: production
+    url: https://tiendavirtual.unrn.edu.ar
+  script:
+    - apt-get update -qq && apt-get install -y -qq zip wget
+    - wget https://obs-community-intl.obs.ap-southeast-1.myhuaweicloud.com/obsutil/current/obsutil_linux_amd64.tar.gz
+    - tar -xzvf obsutil_linux_amd64.tar.gz
+    - chmod -R 755 obsutil_linux_amd64_5.3.4/
+    - cd obsutil_linux_amd64_5.3.4
+    - ./obsutil config -e ${HC_ENDPOINT} -i ${HC_KEY} -k ${HC_SECRET}
+    - ./obsutil sync ../dist/tienda-virtual/ ${HC_BUCKET_WEB_HOST_PROD}
+  only:
+    refs:
+      - main

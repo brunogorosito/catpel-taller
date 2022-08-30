@@ -1,0 +1,27 @@
+.mat-stepper-horizontal {
+  margin-top: 8px;
+}
+  
+.mat-form-field {
+  margin-top: 16px;
+  display: block;
+}
+
+.top-margin-less{
+  margin-top: -4%;
+}
+
+.card-body{
+  overflow: auto;
+}
+
+
+.myClass123 {
+  content: url(https://imgmp.mlstatic.com/org-img/banners/ar/medios/575X40.jpg);
+  height: 40px;
+  width: 100%;
+}
+
+.thumbnail{
+  width: 30px;
+}

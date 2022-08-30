@@ -1,0 +1,75 @@
+<mat-sidenav-container class="example-container" (backdropClick)="close()">
+  <mat-sidenav #sidenav (keydown.escape)="close()" position="end" style="width: 40%;">
+    <app-carrito></app-carrito>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <div class="navbar navbar-white bg-white shadow-sm">
+      <div class="container">
+        <header class="navbar" [ngClass]="{'navbar-fixed': isFixedNavbar}">
+          <div class="container" fxLayout="row wrap" fxLayoutAlign="start center">
+            <div class="navbar-mobile-top" fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="start center">
+              <div class="row">
+                <div class="col">
+                  <div class="navbar-logo">
+                    <app-header></app-header>
+                  </div>
+                </div>
+                <button mat-icon-button color="warn" class="navbar-toggle" (click)="toggleNavbar()">
+                  <mat-icon>{{!navbarOpened ? 'menu': 'close'}}</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div fxFlex class="top-navbar">
+              
+              <div id="nav" class="row" >
+                <div class="col">
+                  <div *ngIf="singUpService.getUserValue() !== null">
+                    <button mat-button style="color: black;" [matMenuTriggerFor]="menu">
+                      <i class="fas fa-user" style="font-size: large; vertical-align: bottom;"></i>
+                      <p style="margin-bottom: 0;">{{singUpService.getUserValue().firstName | uppercase}} {{singUpService.getUserValue().lastName | uppercase}} <i
+                          class="fas fa-caret-down"></i></p>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="changePassword()">
+                        <mat-icon>settings</mat-icon>
+                        <span>CAMBIAR CONTRASEÑA</span>
+                      </button>
+                      <button mat-menu-item (click)="logout()">
+                        <mat-icon>logout</mat-icon>
+                        <span>CERRAR SESION</span>
+                      </button>
+                    </mat-menu>
+                  </div>
+                </div>
+                <div class="col" *ngIf="singUpService.getUserValue() === null">
+                  <div >
+                    <button mat-button style="color: black;" (click)="login()">
+                      <i class="fas fa-sign-in-alt" style="font-size: large; vertical-align: bottom;"></i>
+                      <p style="margin-bottom: 0;">INICIAR SESION</p>
+                    </button>
+                  </div>
+                </div>
+                <div class="col">
+                    <button mat-button (click)="sidenav.open()" style="color: black;" (click)="toggleBadgeVisibility()">
+                      <i class="fas fa-shopping-cart" style="font-size: large; vertical-align: bottom;" matBadge="!"
+                        matBadgeColor="warn" [matBadgeHidden]="hidden"></i>
+                      <p style="margin-bottom: 0;">CARRITO</p>
+                    </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </header>
+
+      </div>
+    </div>
+
+    
+    <div>
+      <app-tienda-virtual [productosSelected]="productosSelected"></app-tienda-virtual>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

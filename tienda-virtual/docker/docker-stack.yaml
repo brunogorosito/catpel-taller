@@ -1,0 +1,42 @@
+version: "3.7"
+
+networks:
+  traefik-unrn:
+        external: true
+
+configs:
+  ngx_proxy_tiendavirtual_prod:
+    external: true
+
+services:
+  nginx-tiendavirtual:
+    image: nginx:stable-alpine
+    networks:
+      - traefik-unrn
+    configs:
+      - source: ngx_proxy_tiendavirtual_prod
+        target: /etc/nginx/nginx.conf
+    deploy:
+      restart_policy:
+        delay: 10s
+        max_attempts: 10
+        window: 60s
+      labels:
+          - "traefik.enable=true"
+          - "traefik.port=80"
+          - "traefik.http.routers.tiendavirtual.rule=Host(`tiendavirtual.unrn.edu.ar`)"
+          - "traefik.http.routers.tiendavirtual.tls=true"
+          - "traefik.http.routers.tiendavirtual.entrypoints=websecure"
+          - "traefik.http.routers.tiendavirtual.service=tiendavirtual"
+          - "traefik.http.routers.tiendavirtual.tls.certresolver=le"
+          - "traefik.http.services.tiendavirtual.loadbalancer.server.port=80"
+          # HTTP
+          - "traefik.http.routers.tiendavirtual-http.entrypoints=web"
+          - "traefik.http.routers.tiendavirtual-http.rule=Host(`tiendavirtual.unrn.edu.ar`)"
+          # Redirect
+          - "traefik.http.routers.recibtiendavirtualos-http.middlewares=tiendavirtual-https"
+          - "traefik.http.middlewares.tiendavirtual-https.redirectscheme.scheme=https"
+      resources:
+         limits:
+            cpus: '0.10'
+            memory: 150M

@@ -1,0 +1,281 @@
+<div class="card-body" style="height:750px">
+    <div>
+        <button type="button" class="btn active float-right" data-toggle="button" aria-pressed="true"
+            (click)="backClicked()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <mat-horizontal-stepper style="overflow: auto;" [linear]="isLinear" #stepper>
+        <mat-step >
+            <ng-template matStepLabel>Resumen de la compra</ng-template>
+            <div *ngFor="let item of productos">
+                <div class="card-body">
+                    <div class="row" style="border: outset;">
+                        <div class="col">
+                            <p class="card-text">
+                                Producto: <strong>{{ item.saleDTO.name }}</strong>
+                            </p>
+                            <p class="card-text">
+                                Precio unitario: <strong>{{ item.amount | currency:'USD' }}</strong>
+                            </p>
+                            <p class="card-text" style="font-size: small;" *ngIf="item.priceAgent != null">
+                                Precio unitario p/agente: {{ item.priceAgent | currency:'USD' }}
+                            </p>
+                            <p class="card-text" style="font-size: small;" *ngIf="item.priceStudent != null">
+                                Precio unitario p/estudiante: {{ item.priceStudent | currency:'USD' }}
+                            </p>
+                            <p class="card-text">
+                                Cantidad: <strong>{{ item.quantity }}</strong>
+                            </p>
+                        </div>
+                        <div class="col" style="text-align: center; border-left: outset;">
+                            <img *ngIf="tieneImagen(item.saleDTO.id)" class="bd-placeholder-img card-img-top"
+                                style=" height: 150px;width: 200px;"
+                                src="{{item.saleDTO.bucketFileDTOS[0].urlBucketFile}}">
+                            <img *ngIf="!tieneImagen(item.saleDTO.id)" class="bd-placeholder-img card-img-top"
+                                style=" height: 150px;width: 200px;"
+                                src="../../../../../assets/imagen-no-disponible.jpg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" style="border: outset;">
+                    <div class="col">
+                        Precio total: <strong>{{ precioTotal | currency:'USD' }}</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col" style="text-align: center;">
+                <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+            </div>
+        </mat-step>
+        <mat-step [stepControl]="firstFormGroup">
+            <ng-template matStepLabel>Datos del comprador/a</ng-template>
+            <h4>Datos del comprador/a</h4>
+           <!--  <div>
+                <p>¿Los datos de su usuario son los mismos que de facturación?</p>
+                <form [formGroup]="options">
+                    <div>
+                        <mat-radio-group [formControl]="floatLabelControl">
+                            <mat-radio-button value="true" (change)="datosFacturacion(true)">SI</mat-radio-button>
+                            <br>
+                            <mat-radio-button value="false" disabled (change)="datosFacturacion(false)">NO</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </form>
+            </div> -->
+            <div *ngIf="sonIguales">
+                <form [formGroup]="firstFormGroup">
+                    <div>
+                        <br>
+                        <p>Seleccione su condición frente al IVA y verifique los datos de facturación registrados, puede modificar o guardarlos si es necesario.</p>
+                        <br>
+                        <div class="top-margin-less">
+                            <mat-form-field appearance="legacy">
+                                <mat-label> Condición frente al IVA</mat-label>
+                                <mat-select placeholder="Ingrese su condicion frente al IVA" formControlName="ivaCondition"
+                                    required >
+                                    <mat-option *ngFor="let condicion of condicionesFrenteAlIVA" [value]="condicion"
+                                        required>
+                                        {{condicion.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="top-margin-less">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Teléfono</mat-label>
+                                <input matInput value="{{telefono}}" formControlName="telefono" required >
+                            </mat-form-field>
+                        </div>
+                        <div class="top-margin-less">
+                            <mat-form-field>
+                                <mat-label>Provincia</mat-label>
+                                <mat-select (selectionChange)="agregarCiudades($event.value.id)" required formControlName="provincia"
+                                [compareWith]="comparaProvincias">
+                                    <mat-option *ngFor="let provincia of provincias" [value]="provincia">
+                                        {{provincia.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="top-margin-less">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Ciudad </mat-label>
+                                <mat-select required formControlName="ciudad" [compareWith]="comparaCiudades">
+                                    <mat-option *ngFor="let ciudad of ciudades" [value]="ciudad">
+                                        {{ciudad.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="top-margin-less">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Calle </mat-label>
+                                <input  matInput value="{{calle}}" required  formControlName="calle">
+                            </mat-form-field>
+                        </div>
+                        <div class="top-margin-less">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Número</mat-label>
+                                <input value="{{numero}}" matInput required  formControlName="numero">
+                            </mat-form-field>
+                        </div>
+                        <div class="top-margin-less">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Piso</mat-label>
+                                <input value="{{piso}}" matInput formControlName="piso">
+                            </mat-form-field>
+                        </div>
+                        <div class="top-margin-less">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Departamento</mat-label>
+                                <input matInput value="{{dpto}}" formControlName="dpto">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col" style="text-align: right;">
+                        <button mat-raised-button matStepperPrevious>Anterior</button>
+                    </div>
+                    <div class="col" >
+                        <button mat-raised-button color="accent" (click)="update()">Actualizar mis datos</button>
+                    </div>
+                    <div class="col">
+                        <button mat-raised-button color="primary" matStepperNext [disabled]="!firstFormGroup.valid" (click)="asignarDatos()">Siguiente</button>
+                    </div>
+                </div>
+            </div>
+            <!-- <div *ngIf="!sonIguales">
+                <form [formGroup]="thirdParty">
+                    <div>
+                        <br>
+                        <p>Perfecto, entonces ingrese los datos de facturación!</p>
+                        <br>
+                        <div class="top-margin-less">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>CUIL/CUIT Tercero</mat-label>
+                                <input matInput placeholder="Ingrese el CUIL/CUIT del tercero"
+                                    formControlName="cuitTercero" required [(ngModel)]="cuitTercero">
+                            </mat-form-field>
+                        </div>
+                        <div class="top-margin-less">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Nombre tercero</mat-label>
+                                <input matInput placeholder="Ingrese el nombre  del tercero"
+                                    formControlName="nombreTercero" required [(ngModel)]="nombreTercero">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col" style="text-align: right;">
+                        <button mat-raised-button matStepperPrevious>Anterior</button>
+                    </div>
+                    <div class="col">
+                        <button mat-raised-button color="primary" matStepperNext [disabled]="!thirdParty.valid" (click)="asignarDatos()">Siguiente</button>
+                    </div>
+                </div>
+            </div> -->
+        </mat-step>
+        <mat-step [stepControl]="thirdFormGroup" label="Finalizar compra">
+            <form [formGroup]="thirdFormGroup">
+                <h4>Ingrese los datos de la tarjeta</h4>
+                <div style="text-align: center;">
+                    <img src="https://imgmp.mlstatic.com/org-img/banners/ar/medios/785X40.jpg"
+                        title="Mercado Pago - Medios de pago" alt="Mercado Pago - Medios de pago" width="100%"
+                        height="100%" />
+                </div>
+                <div>
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Metodo de pago</mat-label>
+                        <mat-select (selectionChange)="agregarDatos($event)" required formControlName="methodCtrl">
+                            <mat-option *ngFor="let metodo of metodosDePago" [value]="metodo.id">
+                                <div class="row">
+                                    <div class="col-md-1" style="text-align: center;">
+                                        <img src="{{metodo.secureThumbnail}}" alt="metodo-thumbnail"
+                                            style="width: 30px;" />
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{metodo.name}}
+                                    </div>
+                                </div>
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="top-margin-less" *ngIf="seleccionTarjeta">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Número de tarjeta</mat-label>
+                        <input matInput (keyup)="onKey($event)" placeholder="Ingrese el número de tarjeta"
+                            formControlName="numTarjCtrl" id="form-checkout__cardNumber" required>
+                    </mat-form-field>
+                </div>
+                <div class="top-margin-less" *ngIf="seleccionTarjeta">
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Código de seguridad</mat-label>
+                                <input matInput placeholder="Ingrese el código de seguridad"
+                                    formControlName="codSegCtrl" id="form-checkout__securityCode" required
+                                    [(ngModel)]="codSeg">
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Mes de expiración</mat-label>
+                                <input matInput placeholder="Ingrese el mes de expiración" formControlName="mesExpCtrl"
+                                    id="form-checkout__cardExpirationMonth" required [(ngModel)]="mes">
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field appearance="legacy">
+                                <mat-label>Año de expiración</mat-label>
+                                <input matInput placeholder="Ingrese el año de expiración" formControlName="yearExpCtrl"
+                                    id="form-checkout__cardExpirationYear" required [(ngModel)]="anio">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-margin-less" *ngIf="seleccionTarjeta">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Nombre del titular de la tarjeta</mat-label>
+                        <input matInput placeholder="Ingrese el nombre y apellido del titular"
+                            formControlName="nomTitCtrl" id="form-checkout__cardholderName" required
+                            [(ngModel)]="titular">
+                    </mat-form-field>
+                </div>
+                <div class="top-margin-less" *ngIf="seleccionTarjeta">
+                    <mat-form-field appearance="legacy">
+                        <mat-label>Cuotas</mat-label>
+                        <mat-select (selectionChange)="selectionPlan($event)" id="form-checkout__installments" required
+                            formControlName="planCtrl">
+                            <mat-option *ngFor="let plan of cuotas" [value]="plan.installments">
+                                {{plan.recommendedMessage}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="top-margin-less">
+                    <p style="margin-top: 4%;">Total a pagar: <strong>{{ precioTotal | currency:'USD' }} </strong></p>
+                </div>
+                <div class="top-margin-less">
+                    <p style="margin-top: 4%;"><strong>*ACLARACIÓN IMPORTANTE:</strong> En caso de devoluciones o consultas, comuniquese vía email con feriasplantastevi@gmail.com </p>
+                </div>
+                <div class="row">
+                    <div class="col" style="text-align: right;">
+                        <button mat-raised-button matStepperPrevious>Anterior</button>
+                    </div>
+                    <div class="col">
+                        <button *ngIf="seleccionTarjeta" mat-raised-button color="primary" (click)="generarToken()"
+                            [disabled]="!thirdFormGroup.valid">Finalizar compra</button>
+                        <button *ngIf="!seleccionTarjeta" mat-raised-button color="primary" (click)="generarTicket()"
+                            [disabled]="!seleccionTicket">Finalizar compra</button>
+                    </div>
+                </div>
+            </form>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

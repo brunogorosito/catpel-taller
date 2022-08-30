@@ -1,0 +1,53 @@
+<div>
+  <button type="button" class="btn active float-right" data-toggle="button" aria-pressed="true" (click)="backClicked()">
+    <i class="fas fa-times"></i>
+    </button>
+</div>
+<div style="overflow: auto; height: 100%;">
+  <div class="card-body" style="height: 100%;" >
+  <mat-card class="example-card">
+    <div class="row" style="height: 550px">
+      <mat-card-title-group>
+        <mat-card-title>
+          <p> 
+            {{ nombre | uppercase}}
+          </p>
+        </mat-card-title>
+  
+      </mat-card-title-group>
+  
+      <mat-card-content>
+        <div style="text-align: -webkit-center;" class="img-phone">
+          <div *ngIf="cantidadImg > 0">
+            <ngb-carousel>
+              <ng-template ngbSlide *ngFor="let img of imagenes">
+                <div class="picsum-img-wrapper" >
+                  <img src="{{img}}" alt="Angular Carousel 1" height="500px" width="100%">
+                </div>
+              </ng-template>
+            </ngb-carousel>
+          </div>
+          <img *ngIf="cantidadImg === 0" class="bd-placeholder-img card-img-top" height="500px" width="100%" src="../../../../../assets/imagen-no-disponible.jpg">      
+        </div>
+        <div style="text-align: -webkit-center;">
+          <br>
+          <button mat-stroked-button *ngIf="stock > 0"> Stock disponible: {{ stock }}</button>
+          <button mat-stroked-button *ngIf="stock === 0"> SIN STOCK</button>
+        </div>
+        <br>
+        <div style="text-align: center">
+          <h7 *ngIf="!descripcion" style="text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;">SIN DESCRIIPCIÓN</h7>
+          <h7 *ngIf="descripcion" style="text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;">{{descripcion | uppercase}}</h7>
+        </div>
+      </mat-card-content>
+      <div class="row" style="align-items: center;display: list-item;">
+        <div class="col">
+          <button (click)="handleAgregarAlCarrito()" type="button" class="btn btn-sm btn-primary product-btn" [disabled]="!disponible" style="float: right;width: 50%;"><i class="fas fa-cart-plus"></i> Agregar al carrito </button>
+        </div>
+        <div class="col">
+          <button (click)="backClicked()" type="button" class="btn btn-sm btn-secondary product-no-btn" style="font-size: medium;"style="float: left;width: 49.5%;"><i class="fas fa-arrow-left"></i> Volver a la tienda</button>
+        </div>  
+      </div>
+    </div>
+  </mat-card>
+</div>

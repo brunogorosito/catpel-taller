@@ -1,0 +1,170 @@
+<div class="login-div layout-dark">
+    <div class="login-content">
+        <div class="login-panel">
+            <div class="login-panel-content">
+                <div class="logo">
+                    <img src="assets/header_logo_unrn_negro (2).svg" alt="Responsive image" class="img-fluid"
+                        style="height: 30px;">
+                </div>
+                <h3>
+                    Registro en la Tienda Virtual de la Universidad Nacional de Río Negro
+                </h3>
+                <form [formGroup]="formRegister">
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <input type="text" matInput placeholder="Nombre" formControlName="nombre" required>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <input type="text" matInput placeholder="Apellido" formControlName="apellido"
+                                    required>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                                <mat-form-field>
+                                    <mat-label>Tipo de documento</mat-label>
+                                    <mat-select (selectionChange)="agregarTipoDocumento($event)" required
+                                    formControlName="tipoDocCtrl">
+                                        <mat-option *ngFor="let tipo of tiposDeDocumentos" [value]="tipo.id">
+                                            {{tipo.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                        </div>
+                        <div class="col">
+                                <mat-form-field>
+                                    <input type="number" matInput placeholder="Número de documento"
+                                        formControlName="documento" required>
+                                </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <input type="email" matInput placeholder="Email" formControlName="email" required>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <input type="number" matInput placeholder="Número de teléfono" formControlName="telefono"
+                                    required>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <input type="number" matInput placeholder="CUIT/CUIL" formControlName="cuit"
+                                    required>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Provincia</mat-label>
+                                <mat-select (selectionChange)="agregarCiudades($event)" required
+                                    formControlName="provincia">
+                                    <mat-option *ngFor="let provincia of provincias" [value]="provincia.id">
+                                        {{provincia.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Ciudad </mat-label>
+                                <mat-select (selectionChange)="agregarCodigoPostal($event)" required
+                                formControlName="ciudad" (keypress)="selectKeyPress($event)">
+                                    <mat-option *ngFor="let ciudad of ciudades" [value]="ciudad.id">
+                                        {{ciudad.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>
+                                <mat-form-field>
+                                    <input type="text" matInput placeholder="Calle" formControlName="calle" required>
+                                </mat-form-field>
+                            </p>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <mat-form-field style=" min-width: 10px; width: 30%; margin-right: 10px;margin-left: -5px;">
+                                        <input type="number" matInput placeholder="Número" formControlName="numero"
+                                            required>
+                                    </mat-form-field>
+                                    <mat-form-field style=" min-width: 10px; width: 30%; margin-right: 10px;">
+                                        <input type="number" matInput placeholder="Piso" formControlName="piso">
+                                    </mat-form-field>
+                                    <mat-form-field style=" min-width: 10px; width: 33%;">
+                                        <input type="text" matInput placeholder="Departamento" formControlName="dpto">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <input [type]="hidePassword ? 'password' : 'text'" matInput placeholder="Contraseña"
+                                    formControlName="password" required>
+                                <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off'
+                                    : 'visibility'}}</mat-icon>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <input [type]="hideRepeatPassword ? 'password' : 'text'" matInput
+                                    placeholder="Repetir contraseña" formControlName="repeat_password" required>
+                                <mat-icon matSuffix (click)="hideRepeatPassword = !hideRepeatPassword">{{hideRepeatPassword
+                                    ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row" style="display: -webkit-inline-box; margin-bottom: 20px;">
+                        <div class="col">
+                                <ngx-recaptcha2 #captchaElem
+                                [siteKey]="siteKey"
+                                formControlName="recaptcha">
+                              </ngx-recaptcha2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="button">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="large" mat-raised-button color="secondary"
+                                        (click)="goToLogin()"><i class="fas fa-arrow-left"></i> Volver 
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="button">
+                                <div class="row">
+                                    <div class="col">
+                                        <button [disabled]="!formRegister.valid" class="large" mat-raised-button color="warn"
+                                        (click)="register()">
+                                            Registrarse <i class="fas fa-plus-square"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

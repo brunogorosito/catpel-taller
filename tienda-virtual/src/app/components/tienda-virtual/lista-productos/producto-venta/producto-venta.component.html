@@ -1,0 +1,27 @@
+<div class="card shadow-sm">
+    <img *ngIf="item.imagen !== null" class="bd-placeholder-img card-img-top" width="100%" height="300px" src="{{item.imagen}}">
+    <img *ngIf="item.imagen === null" class="bd-placeholder-img card-img-top" width="100%" height="300px" src="../../../../../assets/imagen-no-disponible.jpg">
+    
+    <div class="card-body">
+        <p class="card-title">
+            <strong>{{item.title}}</strong>
+        </p>
+        <p class="card-text"style="font-size: small;">
+            Precio: <strong>{{ item.price | currency:'USD' }}</strong>
+        </p>
+        <p class="card-text"style="font-size: small;" *ngIf="disponible" >
+            STOCK: <strong>{{ stock }}</strong>
+        </p>
+        <p class="card-text"style="font-size: small;" *ngIf="!disponible" >
+            <b>SIN STOCK</b>
+        </p>
+
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="btn-group">
+                <button (click)="handleAgregarAlCarrito()" type="button" class="btn btn-sm btn-primary product-btn" [disabled]="!disponible"> <i class="fas fa-cart-plus"></i>
+                    Agregar al carrito </button>
+                <button (click)="verDetalles(item.id)" type="button" class="btn btn-sm btn-outline-secondary" style="margin-left: 5px ;"> <i class="fas fa-search-plus"></i> Ver detalles</button>
+            </div>
+        </div>
+    </div>
+</div>

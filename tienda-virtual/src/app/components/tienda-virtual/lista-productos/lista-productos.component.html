@@ -1,0 +1,15 @@
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" *ngIf="cantidadDeProductos > 0">
+    <div class="col" *ngFor="let plantin of plantines">
+        <app-producto-venta [item]="plantin"></app-producto-venta>
+    </div>
+</div>
+
+<div class="row" *ngIf="cantidadDeProductos === 0">
+    <div class="col">
+        <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+            <h6>
+                Estamos trabajando para ofrecerle los productos solicitados. <b>Disculpe las molestias.</b>
+            </h6>
+        </div>
+    </div>
+</div>

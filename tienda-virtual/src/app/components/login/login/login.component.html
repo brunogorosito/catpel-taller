@@ -1,0 +1,57 @@
+<div class="login-div layout-dark">
+    <div class="login-content">
+        <div class="login-panel">
+            <div class="login-panel-content">
+                <div class="logo">
+                    <img src="assets/header_logo_unrn_negro (2).svg" alt="Responsive image" class="img-fluid"
+                        style="height: 30px;">
+                </div>
+                <h1>Tienda Virtual de la Universidad Nacional de Río Negro</h1>
+                <h3>
+                    Te damos la bienvenida a la Tienda Virtual de la Universidad Nacional de Río Negro
+                </h3>
+                <form [formGroup]="formLogin">
+                    <div>
+                        <mat-form-field>
+                            <input type="email" matInput placeholder="Email" formControlName="email" [(ngModel)]="email"
+                                required>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field>
+                            <input [type]="hide ? 'password' : 'text'" matInput placeholder="Contraseña"
+                                formControlName="password" required [(ngModel)]="password">
+                            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
+                            </mat-icon>
+                        </mat-form-field>
+                    </div>
+                    <div style="text-align: right;margin-bottom: 25px;">
+                        <a href="restorePassword" title="A recuperar contraseña">Olvidé mi contraseña</a>
+                    </div>
+                    <div class="button">
+                        <div class="row">
+                            <div class="col">
+                                <button [disabled]="formLogin.invalid" class="large" type="submit" mat-raised-button
+                                    color="warn" (click)="login()">Ingresar <i class="fas fa-sign-in-alt"></i> </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <mat-divider style="margin-top: 30px; margin-bottom: 20px;"></mat-divider>
+
+                <div class="row">
+                    <div class="col">
+                        <button class="large" mat-raised-button (click)="goToRegister()">
+                            Registrarse <i class="fas fa-user-plus"></i></button>
+                    </div>
+                    <div class="col">
+                        <button class="large" mat-raised-button color="primary" (click)="goToTienda()">
+                            Ingresar como invitado <i class="fas fa-sign-in-alt"></i></button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
