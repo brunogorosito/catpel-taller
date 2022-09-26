@@ -35,17 +35,15 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  loginSocial() {
-    this.singInService.singin();
-  }
 
   public login() {
     this.singInService.login(this.formLogin.get('email').value, this.formLogin.get('password').value).
-      subscribe(
-        success => {
+      subscribe(response =>{
+        if(response !== null){
           this.router.navigate(['']);
-        },
-        err => {
+          this.singInService.setUserIn(response)
+        }
+        else{
           Swal.fire({
             icon: 'error',
             title: 'Datos incorrectos...',
@@ -54,8 +52,8 @@ export class LoginComponent implements OnInit {
             rgba(0,0,0,0.4)
           `
           })
-        });
-
+        }
+      })
   }
 
   goToRegister() {

@@ -31,28 +31,6 @@ export class AuthService {
     })
   }
 
-  public singin() {
-    this.auth2.signIn({
-      scope: 'https://www.googleapis.com/auth/gmail.readonly'
-    }).then(user => {
-      this.subject.next(user);
-     /*  this.loginSocial(user.getAuthResponse().id_token)
-        .subscribe(
-          success => {
-            console.log("SUCCES", success);
-            localStorage.setItem("token", success.accessToken);
-            this.setUserIn();
-            this.ngZone.run(() => this.router.navigate(['home'])).then();
-          },
-          err => {
-            // this.pushMsg(MessageSeverity.ERROR, 'Intento de ingreso fallido', 'Usuario o contraseña incorrecta.');
-            console.log("login invalido");
-          }); */
-    }).catch(() => {
-      this.subject.next(null);
-    })
-  }
-
   public singout() {
     this.subject.next(null);
     localStorage.clear()
@@ -72,17 +50,14 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
 
-    const headers = { 'Content-Type': 'application/json; charset=utf-8'};
-
-    const request = JSON.stringify({
-      "email" : email,
-      "password": password
+    let body = new URLSearchParams();
+    body.set("email",email);
+    body.set("password",password);
+    const header = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
     });
-
-    return this.http.post(loginUrl,request,{headers}).pipe(tap(res => {
-        localStorage.setItem(environment.tokenName, res.token);
-        this.setUserIn(res.token);
-      }));
+    let options = { headers: header}
+    return this.http.post("http://localhost:8080/user",body,options)
   }
 
   logout() {
@@ -93,26 +68,12 @@ export class AuthService {
     localStorage.clear()
   }
 
-  setUserIn(token: string) {
-    if (this.getToken() != null) {
-      const tokenInfo = this.getDecodedAccessToken(token);
-      let id = tokenInfo.userId
-      let username = tokenInfo.username
-      let firstName = tokenInfo.name
-      let lastName  = tokenInfo.lastname
-      let email = tokenInfo.mail
-      let u = new UserLogged(id,username,firstName,lastName,email);
-      this._user.next(u);
-    }
-  }
+  setUserIn(user: any) {
+    localStorage.setItem(environment.tokenName,user.accessToken)
+    let u = new UserLogged(user.id,user.username)
+    this._user.next(u);
+}
 
-  getDecodedAccessToken(token: string): any {
-    try {
-      return jwt_decode(token);
-    } catch(Error) {
-      return null;
-    }
-  }
 
   getToken() {
     return localStorage.getItem(environment.tokenName); 

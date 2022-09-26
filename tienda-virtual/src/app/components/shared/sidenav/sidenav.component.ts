@@ -45,11 +45,11 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.productoService.getProductos().subscribe((productos)=>{
+/*     this.productoService.getProductos().subscribe((productos)=>{
       this.productosSelected = productos
-    });
+    }); */
 
-    if (this.singUpService.getUserValue() !== null) {
+    if (this.singUpService.isLoggedIn()) {
       this.singUpService.setUserIn(this.singUpService.getToken())
       this.user = this.singUpService.getUserValue()
     }else{
@@ -92,30 +92,7 @@ export class SidenavComponent implements OnInit {
     this.router.navigate(['login'])
   }
 
-  changePassword() {
-    const dialogRef: MatDialogRef<any> = this.dialog.open(UpdatePasswordComponent, {
-      width: '700px',
-      disableClose: true,
-    });
-    dialogRef.afterClosed().subscribe(res => {
-      if (!res) {
-        return
-      }
-    })
-  }
 
-  verDatosContacto() {
-    const dialogRef: MatDialogRef<any> = this.dialog.open(ContactComponent, {
-      width: '1000px',
-      disableClose: true,
-      data: localStorage.getItem("tienda")
-    });
-    dialogRef.afterClosed().subscribe(res => {
-      if (!res) {
-        return
-      }
-    })
-  }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -129,6 +106,10 @@ export class SidenavComponent implements OnInit {
 
   toggleNavbar() {
     this.navbarOpened = !this.navbarOpened;
+  }
+
+  isLoggedIn(): boolean{
+    return this.singUpService.isLoggedIn();
   }
 
 }

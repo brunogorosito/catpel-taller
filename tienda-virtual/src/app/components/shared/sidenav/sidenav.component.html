@@ -25,10 +25,10 @@
               
               <div id="nav" class="row" >
                 <div class="col">
-                  <div *ngIf="singUpService.getUserValue() !== null">
+                  <div *ngIf="isLoggedIn()">
                     <button mat-button style="color: black;" [matMenuTriggerFor]="menu">
                       <i class="fas fa-user" style="font-size: large; vertical-align: bottom;"></i>
-                      <p style="margin-bottom: 0;">{{singUpService.getUserValue().firstName | uppercase}} {{singUpService.getUserValue().lastName | uppercase}} <i
+                      <p style="margin-bottom: 0;">{{user.username | uppercase}} <i
                           class="fas fa-caret-down"></i></p>
                     </button>
                     <mat-menu #menu="matMenu">
@@ -43,7 +43,7 @@
                     </mat-menu>
                   </div>
                 </div>
-                <div class="col" *ngIf="singUpService.getUserValue() === null">
+                <div class="col" *ngIf="!isLoggedIn()">
                   <div >
                     <button mat-button style="color: black;" (click)="login()">
                       <i class="fas fa-sign-in-alt" style="font-size: large; vertical-align: bottom;"></i>

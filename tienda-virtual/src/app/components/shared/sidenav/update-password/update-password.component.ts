@@ -44,7 +44,7 @@ export class UpdatePasswordComponent implements OnInit {
   }
 
   update(){
-    if(this.formUpdate.get('password').value === this.formUpdate.get('repeatPassword').value){
+/*     if(this.formUpdate.get('password').value === this.formUpdate.get('repeatPassword').value){
       this.singInService.updatePassword(this.user.id,
         this.formUpdate.get('newPassword').value,
         this.formUpdate.get('password').value).subscribe(
@@ -79,7 +79,7 @@ export class UpdatePasswordComponent implements OnInit {
       rgba(0,0,0,0.4)
     `
       })
-    }
+    }*/
   }
-  
+   
 }

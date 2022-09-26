@@ -215,7 +215,7 @@ export class ConfirmacionCompraComponent implements OnInit {
   }
   
   asignarDatos(){
-    if(this.sonIguales){
+   /*  if(this.sonIguales){
       this.payer = new User(null,
         this.authService.getUserValue().firstName,
         this.authService.getUserValue().lastName,
@@ -249,7 +249,7 @@ export class ConfirmacionCompraComponent implements OnInit {
           this.firstFormGroup.get('telefono').value, 
           this.thirdParty.get('cuitTercero').value, false, 
           this.thirdParty.get('nombreTercero').value); 
-    } 
+    }  */
   }
 
   generarPago(){
@@ -409,7 +409,7 @@ export class ConfirmacionCompraComponent implements OnInit {
   }
 
   update(){
-    let address: Address = new Address(this.firstFormGroup.get('calle').value, this.firstFormGroup.get('numero').value, this.firstFormGroup.get('piso').value,
+/*     let address: Address = new Address(this.firstFormGroup.get('calle').value, this.firstFormGroup.get('numero').value, this.firstFormGroup.get('piso').value,
         this.firstFormGroup.get('dpto').value, this.firstFormGroup.get('ciudad').value);
       let profile = {
         id: this.idProfile,
@@ -446,6 +446,7 @@ export class ConfirmacionCompraComponent implements OnInit {
           `
             })
           });
-  }
+  } */
 
+  }
 }
