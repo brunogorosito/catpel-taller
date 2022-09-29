@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 })
 export class CarritoComponent implements OnInit {
 
-  plantinesAComprar : ItemCarrito[] = [];
+  productosAComprar : any[] = [];
   precioTotal = 0;
   stockPlantin : number = 0;
   quantity : number = 1;
@@ -37,7 +37,7 @@ export class CarritoComponent implements OnInit {
     if(this.authService.getUserValue !== null ){
       this.authService.setUserIn(this.authService.getToken())
     }
-    this.msj.getMsj().subscribe((product: Producto) => {
+    this.msj.getMsj().subscribe((product: any) => {
       this.addPlantinToCart(product);
     })
     this.cantidades = this._formBuilder.group({
@@ -45,30 +45,10 @@ export class CarritoComponent implements OnInit {
     });
   }
 
-  addPlantinToCart(product: Producto) {
+  addPlantinToCart(product: any) {
     if(this.authService.getUserValue() !== null){
-      
-      let productExists = false
-      let itemCarrito = null;
-      let idProducto: number = product.id
-      
-      for (let i in this.plantinesAComprar) {
-        if (this.plantinesAComprar[i].saleDTO.id === idProducto) {
-          this.aumentarCantidad(this.plantinesAComprar[i].saleDTO.id,this.plantinesAComprar[i].quantity)
-          productExists = true
-          this.calcularTotal();
-          break;
-        }
-      }
-  
-      if (!productExists) {
-        this.productoService.getStockPlantin(idProducto).subscribe((stock: number) => {
-            this.stockPlantin = stock;
-            itemCarrito =  new ItemCarrito(idProducto, product, product.price, this.quantity, this.stockPlantin);
-            this.plantinesAComprar.push(itemCarrito);
-            this.calcularTotal();
-        }) 
-      }
+      this.productosAComprar.push(product);
+      this.calcularTotal();
     }else{
       Swal.fire({
         title: '¡Es necesario iniciar sesión!',
@@ -89,93 +69,29 @@ export class CarritoComponent implements OnInit {
 
   calcularTotal(){
     this.precioTotal = 0;
-    this.plantinesAComprar.forEach(item => {
-      this.precioTotal += (item.quantity * item.amount);
+    this.productosAComprar.forEach(item => {
+      this.precioTotal += item.price 
     })
     this.quantity = 1;
   }
 
   limpiar(){
-    this.plantinesAComprar = []
+    this.productosAComprar = []
   }
 
   eliminarDelCarrito(id: number, precio:number){
-    for (let i= 0; i<this.plantinesAComprar.length;i++) {
-      if (this.plantinesAComprar[i].saleDTO.id === id) {
-        this.plantinesAComprar.splice(i,1);
+    for (let i= 0; i<this.productosAComprar.length;i++) {
+      if (this.productosAComprar[i].id === id) {
+        this.productosAComprar.splice(i,1);
         this.precioTotal = this.precioTotal - precio;
         break;
       }
     }
   }
 
-  verificarStock(id: number){
-    for (let i= 0; i<this.plantinesAComprar.length;i++) {
-      if (this.plantinesAComprar[i].saleDTO.id === id) {
-        if(this.quantity > this.plantinesAComprar[i].stock){
-          Swal.fire({
-            position: 'center',
-            icon: 'warning',
-            text:"No hay suficiente stock disponible!",
-            showConfirmButton: false,
-            timer: 3500,
-            width:"20rem"
-          })
-          this.quantity = this.plantinesAComprar[i].stock;
-        }else{
-          this.plantinesAComprar[i].quantity = this.quantity
-          this.calcularTotal();
-          break;
-        }
-      }
-    }
-  }
-
-  aumentarCantidad(id: number , cantidad:number){
-    for (let i= 0; i<this.plantinesAComprar.length;i++) {
-      if (this.plantinesAComprar[i].saleDTO.id === id) {
-        if(cantidad === this.plantinesAComprar[i].stock){
-          Swal.fire({
-            position: 'center',
-            icon: 'warning',
-            text:"No hay más stock disponible!",
-            showConfirmButton: false,
-            timer: 2500,
-            width:"20rem"
-          })
-        }else{
-          this.plantinesAComprar[i].quantity++
-          this.calcularTotal();
-          break;
-        }
-      }
-    }
-  }
-
-  reducirCantidad(id: number, cantidad:number){
-    for (let i= 0; i<this.plantinesAComprar.length;i++) {
-      if (this.plantinesAComprar[i].saleDTO.id === id) {
-        if(cantidad == 1){
-          Swal.fire({
-            position: 'center',
-            icon: 'warning',
-            text:"La cantidad no puede ser menor a 1!",
-            showConfirmButton: false,
-            timer: 2500,
-            width:"25rem"
-          })
-        }else{
-          this.plantinesAComprar[i].quantity--
-          this.precioTotal = this.precioTotal - this.plantinesAComprar[i].amount;
-          break;
-        }
-      }
-    }
-  }
-
   enviarCompra(){
    
-      let pedido = [this.plantinesAComprar, this.precioTotal];
+      let pedido = [this.productosAComprar, this.precioTotal];
       const dialogRef: MatDialogRef<any> = this.dialog.open(ConfirmacionCompraComponent, {
         width: '1000px',
         height: '800px',

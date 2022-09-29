@@ -19,6 +19,7 @@ export class ListaProductosComponent implements OnInit {
 
   ngOnInit(): void {
     this.productos = this.productosSelected;
+    console.log(this.productosSelected)
     this.cantidadDeProductos = this.productos.length
 
     this.mensajeService.enviarPlantinesObservable.subscribe(productos => {

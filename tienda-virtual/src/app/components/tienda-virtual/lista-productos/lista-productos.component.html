@@ -1,6 +1,6 @@
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" *ngIf="cantidadDeProductos > 0">
-    <div class="col" *ngFor="let plantin of plantines">
-        <app-producto-venta [item]="plantin"></app-producto-venta>
+    <div class="col" *ngFor="let item of productosSelected">
+        <app-producto-venta [item]="item"></app-producto-venta>
     </div>
 </div>
 

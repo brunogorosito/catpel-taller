@@ -63,12 +63,13 @@
             </div>
           </div>
         </header>
-
+    
+        
       </div>
     </div>
 
-    
-    <div>
+
+    <div *ngIf="productosSelected.length > 0">
       <app-tienda-virtual [productosSelected]="productosSelected"></app-tienda-virtual>
     </div>
   </mat-sidenav-content>

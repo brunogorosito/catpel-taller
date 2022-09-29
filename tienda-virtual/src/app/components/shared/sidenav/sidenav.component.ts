@@ -45,9 +45,10 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit(): void {
 
-/*     this.productoService.getProductos().subscribe((productos)=>{
-      this.productosSelected = productos
-    }); */
+    this.productoService.getProductos().subscribe((productos)=>{
+      console.log(productos.content)
+      this.productosSelected = productos.content
+    }); 
 
     if (this.singUpService.isLoggedIn()) {
       this.singUpService.setUserIn(this.singUpService.getToken())
@@ -61,6 +62,13 @@ export class SidenavComponent implements OnInit {
       this.hidden = false;
     })
 
+  }
+
+  verProductos(){
+    this.productoService.getProductos().subscribe((productos)=>{
+      console.log(productos.content)
+      this.productosSelected = productos.content
+    }); 
   }
 
   toggleBadgeVisibility() {

@@ -15,7 +15,7 @@ import Swal from 'sweetalert2'
 })
 export class ProductoVentaComponent implements OnInit {
 
-  @Input() item : Producto;
+  @Input() item : any;
   agregado: boolean = false;
   disponible : boolean;
   stock : number;
@@ -26,14 +26,6 @@ export class ProductoVentaComponent implements OnInit {
 
   ngOnInit(): void {
     let idPlantin = this.item.id;
-this.productoService.getStockPlantin(idPlantin).subscribe((stock:number) => {
-      this.stock = stock;
-        if(this.stock > 0){
-          this.disponible = true;
-        }else{
-          this.disponible = false;
-      }
-    }) 
   }
 
   handleAgregarAlCarrito() {

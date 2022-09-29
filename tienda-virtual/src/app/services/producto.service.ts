@@ -18,8 +18,8 @@ export class ProductoService {
   getProductos(): Observable<any>{
 
     const headers = { 'Content-Type': 'application/json; charset=utf-8',
-    'Authorization': 'Bearer ' + this.authService.getToken()};
-    return this.http.get<Producto[]>(productosUrl + "Vivero_1",{headers});
+    /* 'Authorization': 'Bearer ' + this.authService.getToken() */};
+    return this.http.get<Producto[]>("http://localhost:8081/products?page=0&size=2&sort=ASC",{headers});
   }
 
   getPlantin(id: number)/* : Observable<any> */{

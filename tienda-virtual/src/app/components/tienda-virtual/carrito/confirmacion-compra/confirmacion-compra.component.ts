@@ -208,7 +208,7 @@ export class ConfirmacionCompraComponent implements OnInit {
 
   tieneImagen(id: number){
     const producto : ItemCarrito = this.productos.find(element => element.saleDTO.id === id);
-    if(producto.saleDTO.imagen !== null){
+    if(producto.saleDTO.image !== null){
       return true
     }
     return false;
