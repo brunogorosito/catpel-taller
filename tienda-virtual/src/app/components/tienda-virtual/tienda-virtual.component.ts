@@ -21,8 +21,6 @@ export class TiendaVirtualComponent implements OnInit {
   constructor(private singUpService: AuthService) { }
 
   ngOnInit(): void {
-      console.log(this.productosSelected)
-      this.user = this.singUpService.getUserValue() 
       if(this.singUpService.getUserValue !== null ){
         this.singUpService.setUserIn(this.singUpService.getToken())
         this.user = this.singUpService.getUserValue()

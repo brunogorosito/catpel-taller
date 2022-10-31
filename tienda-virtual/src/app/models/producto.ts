@@ -1,7 +1,7 @@
 export interface Producto {
     id: number;
     title: string;
-    price: number;
+    amount: number;
     exitDate:Date;
     format:string;
     image:string;

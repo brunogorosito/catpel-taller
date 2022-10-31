@@ -29,11 +29,20 @@ export class ProductoService {
     return this.http.get<Producto>(unProductoUrl + id,{headers}); */
   }
 
-  getStockPlantin (id: number): Observable<any>{
-    return null
-/*     const headers = {'Content-Type': 'application/json; charset=utf-8',
-    'Authorization': 'Bearer ' + this.authService.getToken()};
-    return this.http.get<Producto>(unProductoStockUrl + id, {headers}); */
+  getCarrito (): Observable<any>{
+    const headers = {'Content-Type': 'application/json; charset=utf-8',
+
+    /* 'Authorization': 'Bearer ' + this.authService.getToken();*/}
+    return this.http.get<Producto>("http://localhost:8082/shopping-carts/"  + this.authService.getUserIdValue() ,  {headers}); 
+  }
+
+  agregarAlCarrito(producto: any): Observable<any>{
+     return this.http.post("http://localhost:8082/shopping-carts/" + 1 + "/product",{
+        id : producto.id,
+        title : producto.title,
+        amount: producto.amount,
+        shoppingCartList : []
+      }) 
   }
 
 

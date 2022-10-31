@@ -115,11 +115,11 @@ export class ConfirmacionCompraComponent implements OnInit {
       planCtrl: ['', Validators.required],
     });
 
-    this.personaService.getMe(this.authService.getUserValue().id).subscribe((res) =>{
+/*     this.personaService.getMe(this.authService.getUserValue().id).subscribe((res) =>{
       this.idProfile = res.id
       this.agregarCiudades(res.address.city.province.id)
       this.rellenarFormulario(res)
-    })
+    }) */
     
   }
 

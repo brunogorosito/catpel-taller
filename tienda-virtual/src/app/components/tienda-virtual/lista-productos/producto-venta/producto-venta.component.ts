@@ -6,6 +6,7 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { DetallesComponent } from './detalles/detalles.component';
 import { ProductoService } from 'src/app/services/producto.service';
 import Swal from 'sweetalert2'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -19,16 +20,25 @@ export class ProductoVentaComponent implements OnInit {
   agregado: boolean = false;
   disponible : boolean;
   stock : number;
-
+  form: FormGroup;
+  
   constructor(private msj : MensajeroService,
     private dialog: MatDialog,
-    private productoService: ProductoService) { }
+    private productoService: ProductoService,
+    private fb: FormBuilder) { 
+      this.form = this.fb.group({
+        rating: ['', Validators.required],
+      })
+    }
 
   ngOnInit(): void {
-    let idPlantin = this.item.id;
+
   }
 
   handleAgregarAlCarrito() {
+    this.productoService.agregarAlCarrito(this.item).subscribe(response =>{
+      console.log(response)
+    })
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -41,19 +51,14 @@ export class ProductoVentaComponent implements OnInit {
   }
 
 
-  verDetalles(plantin: any = {}){
+  openDialog(){
     const dialogRef: MatDialogRef<any> = this.dialog.open(DetallesComponent, {
-      width: '750px',
-      height: '800px',
       disableClose: true,
-      data: plantin
+      data:[ this.form.get("rating").value, this.item]
     });
     dialogRef.afterClosed()
       .subscribe(res => {
-        if (!res) {
-          // If user press cancel
-          return;
-        }
+        this.form.reset()
       })
   }
 

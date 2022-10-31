@@ -18,7 +18,7 @@
                             <p class="card-text">
                                 Precio unitario: <strong>{{ item.amount | currency:'USD' }}</strong>
                             </p>
-                            <p class="card-text" style="font-size: small;" *ngIf="item.priceAgent != null">
+<!--                             <p class="card-text" style="font-size: small;" *ngIf="item.priceAgent != null">
                                 Precio unitario p/agente: {{ item.priceAgent | currency:'USD' }}
                             </p>
                             <p class="card-text" style="font-size: small;" *ngIf="item.priceStudent != null">
@@ -26,7 +26,7 @@
                             </p>
                             <p class="card-text">
                                 Cantidad: <strong>{{ item.quantity }}</strong>
-                            </p>
+                            </p> -->
                         </div>
                         <div class="col" style="text-align: center; border-left: outset;">
                             <img *ngIf="tieneImagen(item.saleDTO.id)" class="bd-placeholder-img card-img-top"

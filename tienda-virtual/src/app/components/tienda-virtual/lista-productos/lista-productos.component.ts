@@ -13,18 +13,15 @@ export class ListaProductosComponent implements OnInit {
   @Input() productosSelected: any[];
   tienda : string;
   productos : Producto[];
-  cantidadDeProductos = 0;
+
 
   constructor( private mensajeService: MensajeroService) { }
 
   ngOnInit(): void {
     this.productos = this.productosSelected;
-    console.log(this.productosSelected)
-    this.cantidadDeProductos = this.productos.length
-
+    console.log(this.productos)
     this.mensajeService.enviarPlantinesObservable.subscribe(productos => {
       this.productos = productos;
-      this.cantidadDeProductos = this.productos.length
     })
 
    

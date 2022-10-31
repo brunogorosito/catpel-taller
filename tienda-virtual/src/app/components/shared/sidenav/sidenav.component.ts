@@ -26,7 +26,7 @@ export class SidenavComponent implements OnInit {
   @HostBinding('class.navbar-opened') navbarOpened = false;
   isTiendaSelected = false;
   hidden = true;
-  user: UserLogged
+  user: any
   productos: Producto[] = []
 
   _productosSelected: Subject<any[]> = new BehaviorSubject(null);
@@ -40,19 +40,21 @@ export class SidenavComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private productoService: ProductoService
+    private productoService: ProductoService,
   ) { }
 
   ngOnInit(): void {
 
     this.productoService.getProductos().subscribe((productos)=>{
-      console.log(productos.content)
       this.productosSelected = productos.content
     }); 
 
     if (this.singUpService.isLoggedIn()) {
-      this.singUpService.setUserIn(this.singUpService.getToken())
       this.user = this.singUpService.getUserValue()
+      this.productoService.getCarrito().subscribe(response =>{
+        for(let item of response.productList)
+        this.msj.enviarMsj(item);
+      })
     }else{
       this.user = null
     }
@@ -99,7 +101,6 @@ export class SidenavComponent implements OnInit {
   login() {
     this.router.navigate(['login'])
   }
-
 
 
   @HostListener('window:scroll', [])

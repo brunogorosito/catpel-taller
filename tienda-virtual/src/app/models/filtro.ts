@@ -1,13 +1,13 @@
 export class Filtro {
     
-    startPrice: number;
-    endPrice: number;
+    startAmount: number;
+    endAmount: number;
     role: string;
     name: string;
 
     constructor(desde: number, hasta: number, role: string, nombre: string) {
-        this.startPrice = desde;
-        this.endPrice = hasta;
+        this.startAmount = desde;
+        this.endAmount = hasta;
         this.role = role;
         this.name = nombre;
     }

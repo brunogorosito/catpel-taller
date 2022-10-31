@@ -18,7 +18,8 @@ export class AuthService {
 
   private auth2: gapi.auth2.GoogleAuth;
   private subject = new ReplaySubject<gapi.auth2.GoogleUser>(1);
-  private _user: BehaviorSubject<UserLogged> = new BehaviorSubject<UserLogged>(null);
+  user: UserLogged
+  userId : number
   jwtHelper: JwtHelperService = new JwtHelperService();
   authUrl = '/auth/login';
   authSocial = '/auth/google';
@@ -40,12 +41,12 @@ export class AuthService {
     return this.subject.asObservable();
   }
 
-  get user(): Observable<UserLogged> {
-    return this._user.asObservable().pipe(filter(user => user != null));
+  getUserIdValue(): number {
+    return this.userId
   }
 
   getUserValue(): UserLogged {
-    return this._user.getValue();
+    return this.user;
   }
 
   login(email: string, password: string): Observable<any> {
@@ -61,7 +62,7 @@ export class AuthService {
   }
 
   logout() {
-    this._user.next(null);
+    this.user = null;
     localStorage.removeItem(environment.tokenName);
     this.router.navigate(['login']);
     this.http.put(logoutUrl,null)
@@ -70,8 +71,8 @@ export class AuthService {
 
   setUserIn(user: any) {
     localStorage.setItem(environment.tokenName,user.accessToken)
-    let u = new UserLogged(user.id,user.username)
-    this._user.next(u);
+    this.userId = user.id
+    this.user = new UserLogged(user.id,user.username)
 }
 
 

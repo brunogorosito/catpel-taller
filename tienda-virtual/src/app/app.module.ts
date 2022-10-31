@@ -46,6 +46,7 @@ import { RestorePasswordComponent } from './components/restore-password/restore-
 import { UpdatePasswordComponent } from './components/shared/sidenav/update-password/update-password.component';
 import { NgxCaptchaModule } from 'ngx-captcha';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { NgxStarRatingModule } from 'ngx-star-rating';
 
 
 
@@ -110,7 +111,8 @@ const routes: Routes = [
     NgxSpinnerModule,
     MatRadioModule,
     NgxCaptchaModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    NgxStarRatingModule
   ],
   providers: [{ provide: Window, useValue: window},
      {provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true} ],

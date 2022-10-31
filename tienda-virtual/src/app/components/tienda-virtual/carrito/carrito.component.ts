@@ -70,7 +70,7 @@ export class CarritoComponent implements OnInit {
   calcularTotal(){
     this.precioTotal = 0;
     this.productosAComprar.forEach(item => {
-      this.precioTotal += item.price 
+      this.precioTotal += item.amount 
     })
     this.quantity = 1;
   }

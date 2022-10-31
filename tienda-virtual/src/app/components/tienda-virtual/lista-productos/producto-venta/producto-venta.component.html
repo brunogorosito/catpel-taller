@@ -7,7 +7,7 @@
             <strong>{{item.title}}</strong>
         </p>
         <p class="card-text"style="font-size: small;">
-            Precio: <strong>{{ item.price | currency:'USD' }}</strong>
+            Precio: <strong>{{ item.amount | currency:'USD' }}</strong>
         </p>
         <p class="card-text"style="font-size: small;" >
             Resumen: <strong>{{ item.summary }}</strong>
@@ -18,8 +18,17 @@
             <div class="btn-group">
                 <button (click)="handleAgregarAlCarrito()" type="button" class="btn btn-sm btn-primary product-btn" > <i class="fas fa-cart-plus"></i>
                     Agregar al carrito </button>
-                <button (click)="verDetalles(item.id)" type="button" class="btn btn-sm btn-outline-secondary" style="margin-left: 5px ;"> <i class="fas fa-search-plus"></i> Ver detalles</button>
             </div>
         </div>
+        <br>
+        <div style="float: right;">
+            <form [formGroup]="form" style="display: table-cell;"> 
+                <ngx-star-rating formControlName="rating" [id]="'rating'" ></ngx-star-rating> 
+                <button (click)="openDialog()" mat-icon-button style="margin-left: 55px;">
+                    <mat-icon>check</mat-icon> Calificar
+                </button>
+            </form>
+        </div>
+       
     </div>
 </div>

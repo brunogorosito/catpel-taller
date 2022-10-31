@@ -25,9 +25,9 @@
                     <tbody style="text-align: center;">
                         <tr *ngFor="let producto of productosAComprar">
                             <td>{{producto.title}}</td>
-                            <td>{{producto.price | currency:'USD'}}</td>
+                            <td>{{producto.amount | currency:'USD'}}</td>
                             <td> <button type="button" class="btn active float-right" data-toggle="button" 
-                                aria-pressed="true" (click)="eliminarDelCarrito(producto.id,producto.price)" >
+                                aria-pressed="true" (click)="eliminarDelCarrito(producto.id,producto.amount)" >
                                 <i class="fas fa-trash-alt"></i>
                             </button></td>
                         </tr>

@@ -6,6 +6,7 @@ import { MensajeroService } from 'src/app/services/mensajero.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-detalles',
@@ -14,37 +15,27 @@ import Swal from 'sweetalert2'
 })
 export class DetallesComponent implements OnInit {
 
-  producto : Producto ;
-  stock : number;
-  disponible: boolean;
-  nombre : string;
-  imagenes: string[] = [];
-  cantidadImg : number;
-  descripcion: string;
+  producto: Producto;
+  item: any;
+  rating1: number;
+  public form: FormGroup;
+  ratingProm: number
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: any[],
     public dialogRef: MatDialogRef<DetallesComponent>,
     private activatedRoute: ActivatedRoute,
-    private productoService: ProductoService,
-    private msj : MensajeroService,
-    private _config: NgbCarouselConfig) {
-      _config.interval = 5000;
-      _config.pauseOnHover = true
-      _config.showNavigationArrows= true;
-    }
+    private fb: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(_params => {
-      let id = this.data;
-      if (id) {
-        this.productoService.getPlantin(id).subscribe(producto => {
-          this.descripcion = producto.abstract
-          this.producto = producto;
-          this.nombre = producto.title;
-          this.verDisponibildad(id);
-        });
-      }
+      this.rating1 = this.data[0];
+      this.item = this.data[1]
+      this.ratingProm = 3;
+      this.form = this.fb.group({
+        rating1: [this.rating1],
+      })
     })
   }
 
@@ -52,28 +43,6 @@ export class DetallesComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  handleAgregarAlCarrito() {
-    Swal.fire({
-      position: 'top-end',
-      icon: 'success',
-      text:"Agregado al carrito!",
-      showConfirmButton: false,
-      timer: 1500,
-      width:"20rem"
-    })
-    this.msj.enviarMsj(this.producto);
-    this.backClicked();
-  }
 
-  verDisponibildad(id: number){
-    this.productoService.getStockPlantin(id).subscribe((stock: number) => {
-      this.stock = stock;
-      if(this.stock === 0){
-        this.disponible = false;
-      }else{
-        this.disponible = true;
-      }
-    })
-  }
-  
+
 }
