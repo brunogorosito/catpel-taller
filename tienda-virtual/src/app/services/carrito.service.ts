@@ -16,19 +16,22 @@ export class CarritoService {
   constructor(private http: HttpClient,
     private authService: AuthService) { }
 
-  enviar(carrito : ItemCarrito[], id: number, amount: number, quantity: number): Observable<ItemCarrito>{
-    const headers = {'Content-Type': 'application/json; charset=utf-8',
-    'Authorization': 'Bearer ' + this.authService.getToken()};
-    return this.http.post<ItemCarrito[]>(enviarCarrito, {
-      id : id,
-      orderDTOList: carrito,
-    },{headers}).pipe(map((response: any) => {
-      (response.content as ItemCarrito[]).map(item => {
-        return item;
-      });
-      return response;
-    })); 
+  enviar(carrito : ItemCarrito[], id: number, amount: number, quantity: number)/* : Observable<any>*/{ 
+   /*  let body = {
+      private Float totalAmount;
+      private LocalDateTime datePurchase;
+  
+      "client":{
 
+        private String name;
+        private String email;
+      }, 
+  
+      "shoppingCart": {
+
+      }
+    } 
+    return this.http.post("http://localhost:8083/rankings");*/
   }
   
 }

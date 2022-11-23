@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
   public login() {
     this.singInService.login(this.formLogin.get('email').value, this.formLogin.get('password').value).
       subscribe(response =>{
+        console.log(response)
         if(response !== null){
           this.router.navigate(['']);
           this.singInService.setUserIn(response)

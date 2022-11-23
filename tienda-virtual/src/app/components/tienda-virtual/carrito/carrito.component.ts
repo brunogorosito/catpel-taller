@@ -23,12 +23,9 @@ export class CarritoComponent implements OnInit {
   stockPlantin : number = 0;
   quantity : number = 1;
   user: UserLogged;
-  cantidades:FormGroup;
 
   constructor( private msj: MensajeroService,
     private dialog: MatDialog,
-    private productoService: ProductoService,
-    private _formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router) {}
 
@@ -40,9 +37,6 @@ export class CarritoComponent implements OnInit {
     this.msj.getMsj().subscribe((product: any) => {
       this.addPlantinToCart(product);
     })
-    this.cantidades = this._formBuilder.group({
-      quantity: ['', [Validators.required,Validators.pattern(/^[0-9]+$/),Validators.min(1)]]
-    });
   }
 
   addPlantinToCart(product: any) {
@@ -90,18 +84,24 @@ export class CarritoComponent implements OnInit {
   }
 
   enviarCompra(){
-   
       let pedido = [this.productosAComprar, this.precioTotal];
-      const dialogRef: MatDialogRef<any> = this.dialog.open(ConfirmacionCompraComponent, {
-        width: '1000px',
-        height: '800px',
-        disableClose: true,
-        data: pedido,
-      });
-      dialogRef.afterClosed().subscribe(res => {
-          if (!res) {
-            this.limpiar()
-          }
+      Swal.fire({
+        title: 'Esta seguro de realizar la compra?',
+        text: "No podrá revertir esta acción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, comprar!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Comprado!',
+            'Los detalles serán enviados a su casilla de correo.',
+            'success'
+          )
+          this.productosAComprar = []
+        }
       })
     
   }

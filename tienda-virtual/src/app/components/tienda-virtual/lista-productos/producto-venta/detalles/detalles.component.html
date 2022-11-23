@@ -25,18 +25,18 @@
         </mat-card-title-group>
         <mat-card-content>
           <div>
-            <form>
+            <form [formGroup]="comment">
               <div class="row">
                 <div class="col">
                   <mat-form-field appearance="legacy" style="width: 100%;">
                     <mat-label>Nombre</mat-label>
-                    <input matInput placeholder="Ingrese su nombre">
+                    <input matInput placeholder="Ingrese su nombre" readonly="true" formControlName="name">
                   </mat-form-field>
                 </div>
                 <div class="col">
                   <mat-form-field appearance="legacy" style="width: 100%;">
                     <mat-label>Deje un comentario</mat-label>
-                    <textarea matInput placeholder="La pelicula me hizo sentir..." style="height: 11px;"></textarea>
+                    <textarea matInput placeholder="La pelicula me hizo sentir..." style="height: 11px;"  formControlName="description"></textarea>
                   </mat-form-field>
                 </div>
                 <div class="col">
@@ -47,17 +47,25 @@
                 </div>
               </div>
             </form>
+            <div class="col">
+              <button mat-raised-button color="primary" (click)="sendComment()"  [disabled]="!comment.valid">Enviar comentario</button>
+            </div>
           </div>
         </mat-card-content>
       </div>
       <div class="row">
-
           <mat-card-subtitle>
             <p>
               <strong>OTROS COMENTARIOS SOBRE  {{ item.title | uppercase}}:</strong> 
             </p>
           </mat-card-subtitle>
-
       </div>
+      <div class="row">
+        <mat-card-subtitle *ngFor="let comm of coments">
+          <p>
+            <strong>{{comm.client.name}}</strong>, Dijo: "{{comm.description}}" y calificó con : <strong>{{comm.cantStar}} estrellas</strong>. 
+          </p>
+        </mat-card-subtitle>
+    </div>
     </mat-card>
   </div>

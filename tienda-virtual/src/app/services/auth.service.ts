@@ -19,7 +19,6 @@ export class AuthService {
   private auth2: gapi.auth2.GoogleAuth;
   private subject = new ReplaySubject<gapi.auth2.GoogleUser>(1);
   user: UserLogged
-  userId : number
   jwtHelper: JwtHelperService = new JwtHelperService();
   authUrl = '/auth/login';
   authSocial = '/auth/google';
@@ -41,24 +40,18 @@ export class AuthService {
     return this.subject.asObservable();
   }
 
-  getUserIdValue(): number {
-    return this.userId
-  }
-
   getUserValue(): UserLogged {
     return this.user;
   }
 
   login(email: string, password: string): Observable<any> {
 
-    let body = new URLSearchParams();
-    body.set("email",email);
-    body.set("password",password);
-    const header = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded'
-    });
-    let options = { headers: header}
-    return this.http.post("http://localhost:8080/user",body,options)
+    let body = {
+      "username":email,
+      "password": password
+    }
+
+    return this.http.post("http://localhost:8080/auth/login",body);
   }
 
   logout() {
@@ -69,10 +62,11 @@ export class AuthService {
     localStorage.clear()
   }
 
-  setUserIn(user: any) {
-    localStorage.setItem(environment.tokenName,user.accessToken)
-    this.userId = user.id
-    this.user = new UserLogged(user.id,user.username)
+  setUserIn(response) {
+    console.log(response)
+    localStorage.setItem(environment.tokenName,response.token)
+    this.user = new UserLogged(response.id,response.username)
+    
 }
 
 

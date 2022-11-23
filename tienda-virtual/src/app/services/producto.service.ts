@@ -29,11 +29,30 @@ export class ProductoService {
     return this.http.get<Producto>(unProductoUrl + id,{headers}); */
   }
 
+  getComments(idProducto: number): Observable<any>{
+    return this.http.get<Producto>("http://localhost:8083/rankings/product/"  + idProducto); 
+  }
+  
+  sendComment(description: string, cantStars: number, productId: number): Observable<any>{
+
+    let body = {
+      "cantStar":cantStars,
+      "description": description,
+      "date": new Date(),
+      "productId": productId,
+      "client": {
+        "id": 3,
+        "name": "User"
+      }
+    }
+    return this.http.post("http://localhost:8083/rankings",body)
+  }
+
   getCarrito (): Observable<any>{
     const headers = {'Content-Type': 'application/json; charset=utf-8',
 
     /* 'Authorization': 'Bearer ' + this.authService.getToken();*/}
-    return this.http.get<Producto>("http://localhost:8082/shopping-carts/"  + this.authService.getUserIdValue() ,  {headers}); 
+    return this.http.get<Producto>("http://localhost:8082/shopping-carts/"  + this.authService.getUserValue().id ,  {headers}); 
   }
 
   agregarAlCarrito(producto: any): Observable<any>{
